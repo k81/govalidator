@@ -3,6 +3,8 @@ package govalidator
 import (
 	"fmt"
 	"reflect"
+
+	"github.com/k81/dynamic"
 )
 
 type TagValidator struct {
@@ -72,7 +74,7 @@ func (v *DiveValidator) Validate(value interface{}, args ...string) error {
 type DynamicFieldValidator struct{}
 
 func (v *DynamicFieldValidator) Validate(value interface{}, args ...string) error {
-	val := reflect.ValueOf(value)
+	val := reflect.ValueOf(dynamic.GetValue(value.(*dynamic.Type)))
 	if !val.IsValid() {
 		return nil
 	}
@@ -81,7 +83,7 @@ func (v *DynamicFieldValidator) Validate(value interface{}, args ...string) erro
 	if validator == nil {
 		return nil
 	}
-	return validator.Validate(value)
+	return validator.Validate(val.Interface())
 }
 
 type field struct {

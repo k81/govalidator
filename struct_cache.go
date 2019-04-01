@@ -6,6 +6,8 @@ import (
 	"reflect"
 	"strings"
 	"sync"
+
+	"github.com/k81/dynamic"
 )
 
 var structValidators = structValidatorCache{}
@@ -92,9 +94,8 @@ func (c *structValidatorCache) register(typ reflect.Type) Validator {
 		}
 
 		// check dynamic field
-		if structField.Type.Kind() == reflect.Interface {
-			dynamicTag := structField.Tag.Get(DynamicTag)
-			if dynamicTag == "true" {
+		if structField.Type.Kind() == reflect.Ptr {
+			if dynamic.IsDynamic(structField.Type) {
 				validator := &DynamicFieldValidator{}
 				validators = append(validators, validator)
 			}

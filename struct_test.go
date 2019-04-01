@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/k81/dynamic"
 	"github.com/stretchr/testify/require"
 )
 
@@ -134,19 +135,19 @@ func TestNilDive(t *testing.T) {
 }
 
 type stDynamicField struct {
-	Content interface{} `json:"data" dynamic:"true"`
+	Content *dynamic.Type `json:"data"`
 }
 
 func TestDynamicField(t *testing.T) {
 	st := &stDynamicField{
-		Content: stEmbeded{0},
+		Content: dynamic.New(stEmbeded{0}),
 	}
 	err := ValidateStruct(st)
 	require.Error(t, err)
 	require.Contains(t, err.Error(), "data.id")
 
 	st2 := &stDynamicField{
-		Content: nil,
+		Content: dynamic.New(nil),
 	}
 	err2 := ValidateStruct(st2)
 	require.NoError(t, err2)

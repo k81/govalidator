@@ -2,7 +2,6 @@ package govalidator
 
 const (
 	DefaultTag         = "valid"
-	DynamicTag         = "dynamic"
 	DefaultTagValueSep = ";"
 )
 
