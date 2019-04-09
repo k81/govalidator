@@ -33,6 +33,7 @@ type PointerFieldStruct struct {
 ```
 
 ## 支持的Tag validator
+```go
 "email":              IsEmail,
 "url":                IsURL,
 "alpha":              IsAlpha,
@@ -67,3 +68,4 @@ type PointerFieldStruct struct {
 "skipempty":          SkipEmpty,
 "regex":              RegEx,
 "dive":              // dive into slice, array, ptr, map
+```
