@@ -16,8 +16,10 @@ func (v *ExampleStruct) Validate() error {
 ```
 
 ## 注册自定义的Validator
+```go
 govalidator.TagValidatorMap.RegisterValidateFunc("sortfields", validateSortFields)
 govalidator.TagValidatorMap.RegisterValidator("example", ExampleValidator{})
+```
 
 ## 关于dive的说明
 对于pointer,slice,array,map等类型的校验，默认校验其本身。
