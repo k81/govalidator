@@ -1,21 +1,36 @@
 ```go
-// struct tag validator example
+// 通过tag校验单个字段
 type ExampleStruct struct {
     Name  string `valid:"skipempty;alpha"`
     Age   int    `valid:"range(1,100)"`
     Email string `valid:"email"`
 }
 
-// Validate function, if you need custom cross field validator.
+// 通过实现Validator接口，实现跨字段校验
 func (v *ExampleStruct) Validate() error {
     if v.Name == "" && v.Email == "" {
         return errors.New("name and email should not both empty")
     }
     return nil
 }
+```
 
-// supported tag
+## 注册自定义的Validator
+govalidator.TagValidatorMap.RegisterValidateFunc("sortfields", validateSortFields)
+govalidator.TagValidatorMap.RegisterValidator("example", ExampleValidator{})
 
+## 关于dive的说明
+对于pointer,slice,array,map等类型的校验，默认校验其本身。
+如果要校验pointer指向的对象，或slice、array、map内的元素的值，需要使用dive
+示例如下:
+```go
+// 校验Name指针不为空，且其指向的字符串为alpha字符集
+type PointerFieldStruct struct {
+    Name *string `valid:"required;dive;alpha"`
+}
+```
+
+## 支持的Tag validator
 "email":              IsEmail,
 "url":                IsURL,
 "alpha":              IsAlpha,
@@ -50,28 +65,3 @@ func (v *ExampleStruct) Validate() error {
 "skipempty":          SkipEmpty,
 "regex":              RegEx,
 "dive":              // dive into slice, array, ptr, map
-
-// Extending the tag validators
-func validateSortFields(value interface{}, args ...string) error {
-    // ...
-}
-govalidator.TagValidatorMap.RegisterValidateFunc("sortfields", validateSortFields)
-
-type ExampleValidator struct {
-}
-
-func (v *ExampleValidator) Validate(value interface{}, args ...string) error {
-    // ...
-}
-govalidator.TagValidatorMap.RegisterValidator("example", ExampleValidator{})
-```
-## 关于dive的说明
-对于pointer,slice,array,map等类型的校验，默认校验其本身。
-如果要校验pointer指向的对象，或slice、array、map内的元素的值，需要使用dive
-示例如下:
-```go
-// 校验Name指针不为空，且其指向的字符串为alpha字符集
-type PointerFieldStruct struct {
-    Name *string `valid:"required;dive;alpha"`
-}
-```
