@@ -7,7 +7,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/k81/dynamic"
+	"github.com/std0d9k81/dynamic"
 )
 
 var structValidators = structValidatorCache{}
